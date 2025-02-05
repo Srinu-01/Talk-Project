@@ -1,7 +1,7 @@
 const Post = require('../models/posts');
 const User = require('../models/user');
 module.exports.renderIndex = async (req, res) => {
-      let datas = await Post.find({}).sort({ createdAt: -1 });
+      let datas = await Post.find({}).sort({ createdAt: -1 }).populate('owner');
       // res.render("main/index", { datas });
       res.json(datas);
 };

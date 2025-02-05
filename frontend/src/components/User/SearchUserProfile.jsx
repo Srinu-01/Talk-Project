@@ -8,7 +8,7 @@ function UserProfile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentUserId, setCurrentUserId] = useState(null); // Store logged-in user ID
+  const [currentUserId, setCurrentUserId] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -24,9 +24,9 @@ function UserProfile() {
         }
 
         const authData = await authResponse.json();
-        setCurrentUserId(authData._id); // Store logged-in user ID
+        setCurrentUserId(authData._id);
 
-        // Fetch profile user details
+        // Fetch profile user details along with posts
         const response = await fetch(`http://localhost:8080/user/${id}`, {
           method: "GET",
           credentials: "include",
@@ -37,10 +37,7 @@ function UserProfile() {
         }
 
         const data = await response.json();
-
-        // Check if the logged-in user is already following this user
         const isFollowing = data.followers.includes(authData._id);
-
         setUser({ ...data, isFollowing });
       } catch (err) {
         setError(err.message);
@@ -53,7 +50,7 @@ function UserProfile() {
   }, [id]);
 
   const handleFollow = async () => {
-    if (user.isFollowing) return; // Prevent duplicate follow requests
+    if (user.isFollowing) return;
 
     try {
       setUser(prev => ({
@@ -114,11 +111,13 @@ function UserProfile() {
     <div className="profile-container">
       <img src={user.profile || "default-profile.png"} alt="Profile" />
       <h2>{user.username || "Unknown User"}</h2>
+
       <div className="stats">
         <div>{(user.posts && user.posts.length) || 0} Posts</div>
         <div>{(user.followers && user.followers.length) || 0} Followers</div>
         <div>{(user.following && user.following.length) || 0} Following</div>
       </div>
+
       <div className="action-buttons">
         <div className="btn-actions"><FaEdit /></div>
         <div className="btn-actions"><FaShare /></div>
@@ -134,6 +133,31 @@ function UserProfile() {
           <button className="btn-actions" onClick={handleFollow}>
             <FaUserPlus />
           </button>
+        )}
+      </div>
+
+      {/* Display User Posts */}
+      <div className="user-posts">
+        <h3>User Posts</h3>
+        {user.posts && user.posts.length > 0 ? (
+          <div className="posts-container">
+            {user.posts.map((post, index) => (
+              <div key={index} className="post-card">
+                {post.image ? (
+                  <img src={post.image} alt="Post" className="media-content" />
+                ) : post.video ? (
+                  <video className="media-content" autoPlay loop muted>
+                    <source src={post.video} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                ) : null}
+                {post.caption && <p className="description">{post.description}</p>}
+                {/* <span className="likes">Likes: {post.likes || 0}</span> */}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p>No posts available</p>
         )}
       </div>
     </div>

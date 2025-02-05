@@ -33,19 +33,16 @@ module.exports.logout = (req, res, next) => {
 };
 module.exports.showUsers = async (req, res) => {
       const { id } = req.params;
-      const user = await User.findById(id);
+      const user = await User.findById(id).populate("posts");
       const isFollowing = user.followers.includes(req.user?._id);
       return res.json({
             ...user.toObject(),
             isFollowing,
       });
 };
-
-
 module.exports.followUser = async (req, res) => {
       const { id } = req.params;
       const user = await User.findById(id);
-
       if (!user.followers.includes(req.user._id)) {
             user.followers.push(req.user._id);
             req.user.following.push(id);
@@ -55,7 +52,6 @@ module.exports.followUser = async (req, res) => {
       } else {
             req.flash("info", "You are already following " + user.username);
       }
-
       res.redirect(`/user/${id}`);
 };
 

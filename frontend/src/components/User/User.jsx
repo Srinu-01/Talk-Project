@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import "./User.css";
 import { FaEdit, FaTrash, FaUsers, FaShare, FaEnvelope } from "react-icons/fa";
 
-function Profile () {
+function Profile() {
       const [user, setUser] = useState(null);
       const [loading, setLoading] = useState(true);
       const [error, setError] = useState(null);
+      const [posts, setPosts] = useState([]); // Store user posts
+
       useEffect(() => {
             const fetchUser = async () => {
                   try {
@@ -26,17 +28,40 @@ function Profile () {
             };
             fetchUser();
       }, []);
+
+      useEffect(() => {
+            if (!user) return;
+            const fetchPosts = async () => {
+                  try {
+                        const response = await fetch("http://localhost:8080/talk");
+                        if (!response.ok) {
+                              throw new Error("Failed to fetch posts");
+                        }
+                        const data = await response.json();
+                        // Filter posts for current user
+                        const userPosts = data.filter(post => post.owner._id === user._id);
+                        setPosts(userPosts);
+                  } catch (err) {
+                        console.error("Error fetching posts:", err);
+                  }
+            };
+            fetchPosts();
+      }, [user]);
+
       if (loading) return <p>Loading...</p>;
       if (error) return <p>Error: {error}</p>;
+
       return (
             <div className="profile-container">
                   <img src={user.profile || "default-profile.png"} alt="Profile Picture" />
                   <h2>{user.username || "Unknown User"}</h2>
+
                   <div className="stats">
-                        <div>{(user.posts && user.posts.length) || 0} Posts</div>
+                        <div>{posts.length} Posts</div>
                         <div>{(user.followers && user.followers.length) || 0} Followers</div>
                         <div>{(user.following && user.following.length) || 0} Following</div>
                   </div>
+
                   <div className="action-buttons">
                         <div className="btn-actions"><FaEdit /></div>
                         <div className="btn-actions"><FaTrash /></div>
@@ -47,6 +72,36 @@ function Profile () {
                         </form>
                         <div className="btn-actions"><FaShare /></div>
                         <div className="btn-actions"><FaEnvelope /></div>
+                  </div>
+
+                  {/* User Posts Section */}
+                  <div className="posts-container">
+                        <h3>User Posts</h3>
+                        {posts.length > 0 ? (
+                              posts.map((post) => (
+                                    <div key={post._id} className="post-card">
+                                          <p className="text-white ownername font-bold">{post.owner.username}</p>
+                                          {post.image ? (
+                                                <img src={post.image} alt="Post" className="media-content" />
+                                          ) : post.video ? (
+                                                <video
+                                                      autoPlay
+                                                      muted
+                                                      data-autoplay
+                                                      className="media-content"
+                                                >
+                                                      <source src={post.video} type="video/mp4" />
+                                                      Your browser does not support the video tag.
+                                                </video>
+                                          ) : null}
+                                          {post.description && (
+                                                <p className="text-white leading-6 mt-2 description">{post.description}</p>
+                                          )}
+                                    </div>
+                              ))
+                        ) : (
+                              <p>No posts available.</p>
+                        )}
                   </div>
             </div>
       );

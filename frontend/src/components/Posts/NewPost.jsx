@@ -19,8 +19,8 @@ function New() {
                   return;
             }
 
-            setIsSubmitting(true); // Disable the submit button
-            setError(''); // Clear previous errors
+            setIsSubmitting(true);
+            setError(''); 
 
             const formData = new FormData();
             formData.append('description', description);

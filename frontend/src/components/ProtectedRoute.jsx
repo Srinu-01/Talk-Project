@@ -8,7 +8,7 @@ const ProtectedRoute = ({ children }) => {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const response = await fetch(`${Backend_Url}/auth/check`, {
+                const response = await fetch(`${Backend_Url}/login`, {
                     credentials: "include", // Important! Ensures cookies are sent
                 });
 

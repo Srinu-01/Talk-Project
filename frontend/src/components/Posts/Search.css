@@ -1,4 +1,14 @@
+/* Searchbar.css */
 /* Search Container */
+
+
+.main {
+      display: flex;                /* Use Flexbox */
+      justify-content: center;      /* Center horizontally */
+      align-items: center;          /* Center vertically */
+      height: 100vh;                /* Ensure it takes full viewport height */
+      width: 100%;                  /* Take full width */
+  }
 .search-container {
       background-color: #f8f9fa;
       /* Light background for container */

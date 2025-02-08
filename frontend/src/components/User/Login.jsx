@@ -1,31 +1,31 @@
-/* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import "./Login.css";
 
-const Modal = ({ show, onClose, children }) => {
-      if (!show) return null;
-      return (
-            <div className="modal show d-block" tabIndex="-1">
-                  <div className="modal-dialog">
-                        <div className="modal-content">
-                              <div className="modal-header">
-                                    <button onClick={onClose} className="btn-close" aria-label="Close"></button>
-                              </div>
-                              <div className="modal-body">{children}</div>
-                        </div>
-                  </div>
-            </div>
-      );
-};
-
-export default function AuthModal() {
+export default function Authmodals() {
       const [isLoginOpen, setLoginOpen] = useState(false);
       const [isSignupOpen, setSignupOpen] = useState(false);
+      const [loading, setLoading] = useState(false);
+      const [error, setError] = useState(null);
       const navigate = useNavigate();
+
+      const loginFormRef = useRef(null);
+      const signupFormRef = useRef(null);
+
+      // Close modals when clicking outside
+      const handleClose = (event, modalsType) => {
+            if (event.target.classList.contains("modals")) {
+                  if (modalsType === "login") setLoginOpen(false);
+                  if (modalsType === "signup") setSignupOpen(false);
+            }
+      };
 
       const handleLogin = async (event) => {
             event.preventDefault();
-            const formData = new FormData(event.target);
+            setLoading(true);
+            setError(null);
+
+            const formData = new FormData(loginFormRef.current);
             const data = {
                   username: formData.get("username"),
                   password: formData.get("password"),
@@ -41,90 +41,142 @@ export default function AuthModal() {
 
                   if (response.ok) {
                         const result = await response.json();
-                        localStorage.setItem("authToken", result.token); // Store token
-                        navigate("/talk"); // Redirect using React Router
+                        localStorage.setItem("authToken", result.token);
+                        navigate("/talk");
                   } else {
-                        alert("Login failed. Please check your credentials.");
+                        setError("Invalid username or password.");
                   }
             } catch (error) {
                   console.error("Login error:", error);
-                  alert("Something went wrong. Try again later.");
+                  setError("Something went wrong. Try again later.");
+            } finally {
+                  setLoading(false);
             }
       };
 
       const handleSignup = async (event) => {
             event.preventDefault();
-            const formData = new FormData(event.target);
+            setError(null);
+
+            const formData = new FormData(signupFormRef.current);
 
             try {
                   const response = await fetch("http://localhost:8080/signup", {
                         method: "POST",
-                        body: formData, // Handles file upload
+                        body: formData,
                   });
 
                   if (response.ok) {
-                        alert("Account created! Redirecting to the posts page.");
+                        alert("Account created! Redirecting...");
                         setSignupOpen(false);
-                        navigate("/talk"); // Redirect to /talk after successful signup
+                        navigate("/talk");
                   } else {
-                        alert("Signup failed. Try again.");
+                        setError("Signup failed. Try again.");
                   }
             } catch (error) {
                   console.error("Signup error:", error);
-                  alert("Something went wrong. Try again later.");
+                  setError("Something went wrong. Try again later.");
             }
       };
 
       return (
             <div className="container text-center mt-5">
-                  <h2 className="mb-4">Modal Login Form</h2>
-                  <button onClick={() => setLoginOpen(true)} className="btn btn-primary">
-                        Login
-                  </button>
+                  <div className="mid">
+                        <h2 className="Head">Login Form</h2>
+                        <button
+                              onClick={() => setLoginOpen(true)}
+                              className="btn btn-primary"
+                              style={{ width: "auto" }}
+                        >
+                              Login
+                        </button>
+                  </div>
 
-                  {/* Login Modal */}
-                  <Modal show={isLoginOpen} onClose={() => setLoginOpen(false)}>
-                        <form onSubmit={handleLogin}>
-                              <h3>Login</h3>
-                              <div className="mb-3">
-                                    <input type="text" name="username" placeholder="Enter Username" required className="form-control" />
-                              </div>
-                              <div className="mb-3">
-                                    <input type="password" name="password" placeholder="Enter Password" required className="form-control" />
-                              </div>
-                              <button className="btn btn-primary w-100" type="submit">Login</button>
-                              <div className="form-check mt-2">
-                                    <input type="checkbox" className="form-check-input" name="remember" />
-                                    <label className="form-check-label">Remember me</label>
-                              </div>
-                              <div className="d-flex justify-content-between mt-2">
-                                    <a href="#" className="text-primary">Forgot password?</a>
-                                    <button onClick={() => { setLoginOpen(false); setSignupOpen(true); }} className="btn btn-link">
-                                          Create an account
-                                    </button>
-                              </div>
-                        </form>
-                  </Modal>
+                  {/* Login modals */}
+                  {isLoginOpen && (
+                        <div id="id01" className={`modals ${isLoginOpen ? "show" : ""}`} onClick={(e) => handleClose(e, "login")}>
+                              <form className="modals-content animate" ref={loginFormRef} onSubmit={handleLogin}>
+                                    <div className="imgcontainer">
+                                          {/* <button type="button" className="close" onClick={() => setLoginOpen(false)}>
+                                                &times;
+                                          </button> */}
+                                          <div className="icon-container">
+                                                <div className="microphone-icon">
+                                                      <div className="icon-text">T</div>
+                                                </div>
+                                          </div>
+                                    </div>
 
-                  {/* Signup Modal */}
-                  <Modal show={isSignupOpen} onClose={() => setSignupOpen(false)}>
-                        <form onSubmit={handleSignup}>
-                              <h3>Sign Up</h3>
-                              <div className="mb-3">
-                                    <input type="email" name="email" placeholder="Enter Email" required className="form-control" />
-                              </div>
-                              <div className="mb-3">
-                                    <input type="text" name="username" placeholder="Enter Username" required className="form-control" />
-                              </div>
-                              <div className="mb-3">
-                                    <input type="file" name="profile" required className="form-control" />
-                              </div>
-                              <div className="mb-3">
-                                    <input type="password" name="password" placeholder="Enter Password" required className="form-control" />
-                              </div>
-                              <button className="btn btn-success w-100" type="submit">Create Account</button>
-                        </form>
-                  </Modal>
+                                    <div className="container">
+                                          {error && <p className="error-message">{error}</p>}
+                                          <label htmlFor="uname"><b>Username</b></label>
+                                          <input type="text" placeholder="Enter Username" name="username" required />
+
+                                          <label htmlFor="psw"><b>Password</b></label>
+                                          <input type="password" placeholder="Enter Password" name="password" required />
+
+                                          <button type="submit" disabled={loading}>
+                                                {loading ? "Logging in..." : "Login"}
+                                          </button>
+
+                                          <label>
+                                                <input type="checkbox" name="remember" /> Remember me
+                                          </label>
+                                    </div>
+
+                                    <div className="container" style={{ backgroundColor: "#f1f1f1" }}>
+                                          <button type="button" className="cancelbtn" onClick={() => setLoginOpen(false)}>
+                                                Cancel
+                                          </button>
+                                          <span className="psw">
+                                                Forgot <a href="#">password?</a>
+                                          </span>
+                                          <span className="psw">
+                                                No account?{" "}
+                                                <a href="#" onClick={() => { setLoginOpen(false); setSignupOpen(true); }}>
+                                                      Create an account
+                                                </a>
+                                          </span>
+                                    </div>
+                              </form>
+                        </div>
+                  )}
+
+                  {/* Signup modals */}
+                  {isSignupOpen && (
+                        <div id="id02" className={`modals ${isSignupOpen ? "show" : ""}`} onClick={(e) => handleClose(e, "signup")}>
+                              <form className="modals-content animate" ref={signupFormRef} onSubmit={handleSignup}>
+                                    <div className="imgcontainer">
+                                          <button type="button" className="close" onClick={() => setSignupOpen(false)}>
+                                                &times;
+                                          </button>
+                                    </div>
+
+                                    <div className="container">
+                                          {error && <p className="error-message">{error}</p>}
+                                          <label htmlFor="email"><b>Email</b></label>
+                                          <input type="text" placeholder="Enter Email" name="email" required />
+
+                                          <label htmlFor="uname"><b>Username</b></label>
+                                          <input type="text" placeholder="Enter Username" name="username" required />
+
+                                          <label htmlFor="profile"><b>Profile:</b></label>
+                                          <input type="file" className="pro" id="profile" name="profile" required />
+
+                                          <label htmlFor="psw"><b>Password</b></label>
+                                          <input type="password" placeholder="Enter Password" name="password" required />
+
+                                          <button type="submit">Create Account</button>
+                                    </div>
+
+                                    <div className="container" style={{ backgroundColor: "#f1f1f1" }}>
+                                          <button type="button" className="cancelbtn" onClick={() => setSignupOpen(false)}>
+                                                Cancel
+                                          </button>
+                                    </div>
+                              </form>
+                        </div>
+                  )}
             </div>
       );
 }

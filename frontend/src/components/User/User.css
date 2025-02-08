@@ -1,17 +1,30 @@
+/* Main container that centers everything */
+.profile-page {
+      display: flex;
+      justify-content: center;  /* Center horizontally */
+      align-items: center;  /* Center vertically */
+      height: 100vh;  /* Full viewport height */
+      width: 100%;  /* Full width */
+      padding: 20px; /* Add padding for smaller screens */
+      box-sizing: border-box;
+}
+
+/* Profile container (User profile card) */
 .profile-container {
+      max-width: 400px;  /* Prevents it from stretching too much */
+      width: 100%;
+      padding: 20px;
       background-color: #192734;
       border-radius: 10px;
-      padding: 20px;
-      width: 400px;
-      max-width: 600px;
       text-align: center;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
       box-sizing: border-box;
 }
 
+/* Ensure image is responsive */
 .profile-container img {
-      width: 150px;
-      height: 150px;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
       background-color: #ccc;
       display: block;
@@ -81,4 +94,18 @@
       object-fit: cover;
       border-radius: 8px;
       margin-top: 10px;
+}
+/* Mobile Responsive Design */
+@media screen and (max-width: 768px) {
+      .profile-page {
+            height: auto;  /* Let it expand naturally */
+            min-height: 100vh;  /* Ensures it takes full screen */
+            flex-direction: column; /* Stack elements vertically */
+            padding: 10px;  /* Add spacing */
+      }
+
+      .profile-container {
+            width: 90%;  /* Make it take up more space on mobile */
+            padding: 15px; /* Adjust padding */
+      }
 }

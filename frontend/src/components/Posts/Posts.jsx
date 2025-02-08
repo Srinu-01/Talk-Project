@@ -4,7 +4,7 @@ import './Posts.css';
 function TalkPosts() {
       const [posts, setPosts] = useState([]);
       const [loading, setLoading] = useState(true);
-      const [error, setError] = useState(null); 
+      const [error, setError] = useState(null);
       useEffect(() => {
             const fetchPosts = async () => {
                   try {
@@ -20,12 +20,11 @@ function TalkPosts() {
                         setLoading(false);
                   }
             };
-
             fetchPosts();
       }, []);
       const isElementInViewport = (el) => {
             const rect = el.getBoundingClientRect();
-            return rect.top < window.innerHeight && rect.bottom > 0; 
+            return rect.top < window.innerHeight && rect.bottom > 0;
       };
       useEffect(() => {
             const handleScroll = () => {
@@ -39,7 +38,7 @@ function TalkPosts() {
                   });
             };
             window.addEventListener("scroll", handleScroll);
-            handleScroll(); 
+            handleScroll();
             return () => window.removeEventListener("scroll", handleScroll);
       }, [posts]);
       const togglePlayPause = (event) => {
@@ -58,22 +57,20 @@ function TalkPosts() {
                   <div className="text-center">
                         {posts.map((post) => (
                               <div key={post._id} className="post-container m-4 p-4 border-none bg-gray-800 rounded-lg shadow-lg">
-                                    
+
+                                    <div className="post-header flex items-center mb-2">
                                           <img src={post.owner.profile || "default-profile.png"} alt={post.owner.username} className="post-avatar" />
-                                    <p className="text-white ownername font-bold">{post.owner.username}</p>
+                                          <p className="text-white ownername font-bold ml-2">{post.owner.username}</p>
+                                    </div>
+
                                     {post.image ? (
                                           <img src={post.image} alt="Post" className="media-content" />
                                     ) : post.video ? (
-                                          <video
-                                                autoPlay
-                                                muted 
-                                                data-autoplay
-                                                className="media-content"
-                                                onClick={togglePlayPause}
-                                          >
+                                          <video autoPlay muted playsInline className="media-content" onClick={togglePlayPause}>
                                                 <source src={post.video} type="video/mp4" />
                                                 Your browser does not support the video tag.
                                           </video>
+
                                     ) : null}
                                     {post.description && (
                                           <p className="text-white leading-6 mt-2 description">{post.description}</p>

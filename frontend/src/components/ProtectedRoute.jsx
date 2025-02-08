@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(null); // null = loading state
-    const Backend_Url = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"; 
+    const Backend_Url = import.meta.env.VITE_BACKEND_URL; 
     useEffect(() => {
         const checkAuth = async () => {
             try {

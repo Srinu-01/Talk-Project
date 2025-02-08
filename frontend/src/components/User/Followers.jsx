@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import './Followers.css';
 
 const Followers = () => {
-      const Backend_Url = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"; 
+      const Backend_Url = import.meta.env.VITE_BACKEND_URL; 
       const { id } = useParams();
       const [followers, setFollowers] = useState([]);
       const [loading, setLoading] = useState(true);

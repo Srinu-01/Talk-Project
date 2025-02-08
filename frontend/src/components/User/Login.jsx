@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
 export default function Authmodals() {
-      const Backend_Url = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"; 
+      const Backend_Url = import.meta.env.VITE_BACKEND_URL; 
       const [isLoginOpen, setLoginOpen] = useState(false);
       const [isSignupOpen, setSignupOpen] = useState(false);
       const [loading, setLoading] = useState(false);

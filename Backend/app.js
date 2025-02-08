@@ -16,8 +16,18 @@ const ejsMate = require("ejs-mate");
 const Post = require("./models/posts");
 
 const PORT = 8080;
-const cors = require('cors');
-app.use(cors({ origin: 'http://localhost:5173', credentials: true, }));
+const cors = require("cors");
+
+const allowedOrigins = [
+      "http://localhost:5173", // Local frontend
+      "https://talk-project-ot18.vercel.app" // Deployed frontend
+];
+
+app.use(cors({
+      origin: allowedOrigins,
+      credentials: true
+}));
+
 
 // Routers
 const user = require('./routes/user');

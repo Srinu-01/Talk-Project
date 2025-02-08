@@ -4,11 +4,11 @@ import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(null); // null = loading state
-
+    const Backend_Url = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"; 
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const response = await fetch("http://localhost:8080/auth/check", {
+                const response = await fetch(`${Backend_Url}/auth/check`, {
                     credentials: "include", // Important! Ensures cookies are sent
                 });
 

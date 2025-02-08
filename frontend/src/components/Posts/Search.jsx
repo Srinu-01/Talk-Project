@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './Search.css';
 
 function SearchBar() {
+      const Backend_Url = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"; 
       const [query, setQuery] = useState('');
       const [users, setUsers] = useState([]);
       const [showSuggestions, setShowSuggestions] = useState(false);
@@ -12,7 +13,7 @@ function SearchBar() {
 
             if (value.trim().length >= 2) {
                   try {
-                        const response = await fetch(`http://localhost:8080/talk/search/users?query=${encodeURIComponent(value)}`);
+                        const response = await fetch(`${Backend_Url}/talk/search/users?query=${encodeURIComponent(value)}`);
                         const data = await response.json();
                         console.log('Fetched Users:', data);
                         setUsers(data);

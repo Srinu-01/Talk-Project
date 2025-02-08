@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import './Followers.css';
 
 const Followers = () => {
+      const Backend_Url = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"; 
       const { id } = useParams();
       const [followers, setFollowers] = useState([]);
       const [loading, setLoading] = useState(true);
@@ -10,7 +11,7 @@ const Followers = () => {
 
       const fetchFollowers = useCallback(async () => {
             try {
-                  const response = await fetch(`http://localhost:8080/user/followers/${id}`, {
+                  const response = await fetch(`${Backend_Url}/user/followers/${id}`, {
                         method: "GET",
                         credentials: "include",
                   });

@@ -3,6 +3,7 @@ import "./User.css";
 import { FaEdit, FaTrash, FaUsers, FaShare, FaEnvelope } from "react-icons/fa";
 
 function Profile() {
+      const Backend_Url = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"; 
       const [user, setUser] = useState(null);
       const [loading, setLoading] = useState(true);
       const [error, setError] = useState(null);
@@ -11,7 +12,7 @@ function Profile() {
       useEffect(() => {
             const fetchUser = async () => {
                   try {
-                        const response = await fetch("http://localhost:8080/currUser", {
+                        const response = await fetch(`${Backend_Url}/currUser`, {
                               method: "GET",
                               credentials: "include",
                         });
@@ -33,7 +34,7 @@ function Profile() {
             if (!user) return;
             const fetchPosts = async () => {
                   try {
-                        const response = await fetch("http://localhost:8080/talk");
+                        const response = await fetch(`${Backend_Url}/talk`);
                         if (!response.ok) {
                               throw new Error("Failed to fetch posts");
                         }

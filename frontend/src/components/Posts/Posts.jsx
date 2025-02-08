@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import './Posts.css';
 
 function TalkPosts() {
+      const Backend_Url = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"; 
       const [posts, setPosts] = useState([]);
       const [loading, setLoading] = useState(true);
       const [error, setError] = useState(null);
       useEffect(() => {
             const fetchPosts = async () => {
                   try {
-                        const response = await fetch("http://localhost:8080/talk");
+                        const response = await fetch(`${Backend_Url}/talk`);
                         if (!response.ok) {
                               throw new Error("Failed to fetch posts");
                         }

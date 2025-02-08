@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './New.css';
 
 function New() {
+      const Backend_Url = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"; 
       const [description, setDescription] = useState('');
       const [image, setImage] = useState(null);
       const [video, setVideo] = useState(null);
@@ -28,7 +29,7 @@ function New() {
             if (video) formData.append('video', video);
 
             try {
-                  const response = await fetch('http://localhost:8080/talk', {
+                  const response = await fetch(`${Backend_Url}/talk`, {
                         method: 'POST',
                         body: formData,
                         credentials: 'include',

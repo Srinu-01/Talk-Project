@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
 export default function Authmodals() {
+      const Backend_Url = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"; 
       const [isLoginOpen, setLoginOpen] = useState(false);
       const [isSignupOpen, setSignupOpen] = useState(false);
       const [loading, setLoading] = useState(false);
@@ -32,7 +33,7 @@ export default function Authmodals() {
             };
 
             try {
-                  const response = await fetch("http://localhost:8080/login", {
+                  const response = await fetch(`${Backend_Url}/login`, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(data),
@@ -61,7 +62,7 @@ export default function Authmodals() {
             const formData = new FormData(signupFormRef.current);
 
             try {
-                  const response = await fetch("http://localhost:8080/signup", {
+                  const response = await fetch(`${Backend_Url}/signup`, {
                         method: "POST",
                         body: formData,
                   });

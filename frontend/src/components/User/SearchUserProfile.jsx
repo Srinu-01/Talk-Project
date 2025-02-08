@@ -4,6 +4,7 @@ import "./User.css";
 import { FaEdit, FaUsers, FaShare, FaEnvelope, FaUserMinus, FaUserPlus } from "react-icons/fa";
 
 function UserProfile() {
+  const Backend_Url = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"; 
   const { id } = useParams();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -14,7 +15,7 @@ function UserProfile() {
     const fetchUser = async () => {
       try {
         // Fetch logged-in user details
-        const authResponse = await fetch(`http://localhost:8080/user/${id}`, {
+        const authResponse = await fetch(`${Backend_Url}/user/${id}`, {
           method: "GET",
           credentials: "include",
         });
@@ -27,7 +28,7 @@ function UserProfile() {
         setCurrentUserId(authData._id);
 
         // Fetch profile user details along with posts
-        const response = await fetch(`http://localhost:8080/user/${id}`, {
+        const response = await fetch(`${Backend_Url}/user/${id}`, {
           method: "GET",
           credentials: "include",
         });
@@ -59,7 +60,7 @@ function UserProfile() {
         isFollowing: true,
       }));
 
-      const response = await fetch(`http://localhost:8080/user/follow/${id}`, {
+      const response = await fetch(`${Backend_Url}/user/follow/${id}`, {
         method: "POST",
         credentials: "include",
       });
@@ -85,7 +86,7 @@ function UserProfile() {
         isFollowing: false,
       }));
 
-      const response = await fetch(`http://localhost:8080/user/unfollow/${id}`, {
+      const response = await fetch(`${Backend_Url}/user/unfollow/${id}`, {
         method: "POST",
         credentials: "include",
       });

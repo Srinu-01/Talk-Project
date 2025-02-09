@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(null); // null = loading state
-    const Backend_Url = import.meta.env.VITE_BACKEND_URL; 
+    const Backend_Url = "https://talk-project-backend.vercel.app/talk"; 
     useEffect(() => {
         const checkAuth = async () => {
             try {

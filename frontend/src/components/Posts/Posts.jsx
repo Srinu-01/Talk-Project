@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import './Posts.css';
 
 function TalkPosts() {
-      const Backend_Url = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"; 
+      const Backend_Url = "https://talk-project-backend.vercel.app/talk"; 
       const [posts, setPosts] = useState([]);
       const [loading, setLoading] = useState(true);
       const [error, setError] = useState(null);

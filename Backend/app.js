@@ -19,8 +19,7 @@ const PORT = 8080;
 const cors = require("cors");
 
 const allowedOrigins = [
-      "http://localhost:5173", // Local frontend
-      "https://talk-project-ot18.vercel.app" // Deployed frontend
+      "https://talk-project-nu.vercel.app/"
 ];
 
 app.use(cors({

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './New.css';
 
 function New() {
-      const Backend_Url = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"; 
+      const Backend_Url = "https://talk-project-backend.vercel.app/talk"; 
       const [description, setDescription] = useState('');
       const [image, setImage] = useState(null);
       const [video, setVideo] = useState(null);

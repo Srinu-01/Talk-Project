@@ -19,7 +19,7 @@ const PORT = 8080;
 const cors = require("cors");
 
 const allowedOrigins = [
-      "https://talk-project-nu.vercel.app/"
+      "*"
 ];
 
 app.use(cors({

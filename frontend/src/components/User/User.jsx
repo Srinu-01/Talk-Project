@@ -3,7 +3,7 @@ import "./User.css";
 import { FaEdit, FaTrash, FaUsers, FaShare, FaEnvelope } from "react-icons/fa";
 
 function Profile() {
-      const Backend_Url = import.meta.env.VITE_BACKEND_URL; 
+      const Backend_Url = "https://talk-project-backend.vercel.app/talk"; 
       const [user, setUser] = useState(null);
       const [loading, setLoading] = useState(true);
       const [error, setError] = useState(null);

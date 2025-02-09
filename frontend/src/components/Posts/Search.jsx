@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './Search.css';
 
 function SearchBar() {
-      const Backend_Url = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"; 
+      const Backend_Url = "https://talk-project-backend.vercel.app/talk"; 
       const [query, setQuery] = useState('');
       const [users, setUsers] = useState([]);
       const [showSuggestions, setShowSuggestions] = useState(false);

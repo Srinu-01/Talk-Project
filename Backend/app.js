@@ -18,15 +18,12 @@ const Post = require("./models/posts");
 const PORT = 8080;
 const cors = require("cors");
 
-const allowedOrigins = [
-      "*"
-];
-
 app.use(cors({
-      origin: "*",
-      credentials: true
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'],
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
-
 
 // Routers
 const user = require('./routes/user');

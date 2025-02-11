@@ -19,7 +19,7 @@ const cors = require("cors");
 
 app.use(
       cors({
-            origin: 'http://localhost:5173', // Specify the allowed origin
+            origin: 'https://talk-project-backend.vercel.app/', // Specify the allowed origin
             methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'],
             credentials: true, // Allow credentials
             allowedHeaders: ['Content-Type', 'Authorization']

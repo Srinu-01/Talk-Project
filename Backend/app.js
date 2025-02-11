@@ -13,17 +13,18 @@ const path = require("path");
 const User = require("./models/user");
 const flash = require("connect-flash");
 const ejsMate = require("ejs-mate");
-const Post = require("./models/posts");
-
+const Post = require("./models/posts")
 const PORT = 8080;
 const cors = require("cors");
 
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'],
-  credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(
+      cors({
+            origin: 'http://localhost:5173', // Specify the allowed origin
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'],
+            credentials: true, // Allow credentials
+            allowedHeaders: ['Content-Type', 'Authorization']
+      })
+);
 
 // Routers
 const user = require('./routes/user');
@@ -60,11 +61,13 @@ const sessionOptions = {
       saveUninitialized: false,
       cookie: {
             httpOnly: true,
-            expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+            secure: true,
+            sameSite: "none", // Required for cross-origin authentication
             maxAge: 1000 * 60 * 60 * 24 * 7,
       },
 };
 app.use(session(sessionOptions));
+
 app.use(flash());
 
 // Passport.js setup
@@ -83,6 +86,7 @@ app.use((req, res, next) => {
       next();
 });
 app.get('/currUser', (req, res) => {
+      console.log("Session:", req.session);
       if (!req.user) {
             return res.status(401).json({ error: "User not authenticated" });
       }
@@ -92,6 +96,13 @@ app.get('/currUser', (req, res) => {
 app.use('/', user);
 app.use('/talk', talk);
 
+app.post("/login", (req, res) => {
+      passport.authenticate("local", {
+            successRedirect: "/talk",
+            failureRedirect: "/login",
+            failureFlash: true,
+      })(req, res);
+})
 app.get("/", (req, res) => {
       res.redirect("/talk");
 });
@@ -104,5 +115,5 @@ app.use((err, req, res, next) => {
 
 // Starting the server
 app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+      console.log(Server is running on port ${PORT});
 });
